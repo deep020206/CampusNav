@@ -6,7 +6,7 @@ import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/location_details_screen.dart';
-import 'screens/locations_list_screen.dart'; // ignore: unused_import
+import 'screens/locations_list_screen.dart';
 import 'screens/navigation_screen.dart';
 import 'screens/settings_screen.dart';
 import 'theme/app_theme.dart';
@@ -29,23 +29,31 @@ class MyApp extends StatelessWidget {
       case '/navigation':
         return MaterialPageRoute(builder: (_) => const NavigationScreen());
       case '/settings':
-        return MaterialPageRoute(builder: (_) => const SettingsScreen());      case '/locations':
-        final args = settings.arguments as LocationType?;
-        return MaterialPageRoute(
-          // ignore: undefined_method
-          builder: (_) => LocationsListScreen(locationType: args),
-        );
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
+      case '/locations':
+        return _buildLocationsRoute(settings);
       case '/location-details':
-        final location = settings.arguments as CampusLocation?;
-        if (location != null) {
-          return MaterialPageRoute(
-            builder: (_) => LocationDetailsScreen(location: location),
-          );
-        }
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return _buildLocationDetailsRoute(settings);
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }
+  }
+
+  Route<dynamic> _buildLocationsRoute(RouteSettings settings) {
+    final args = settings.arguments as LocationType?;
+    return MaterialPageRoute(
+      builder: (_) => LocationsListScreen(locationType: args),
+    );
+  }
+
+  Route<dynamic> _buildLocationDetailsRoute(RouteSettings settings) {
+    final location = settings.arguments as CampusLocation?;
+    if (location != null) {
+      return MaterialPageRoute(
+        builder: (_) => LocationDetailsScreen(location: location),
+      );
+    }
+    return MaterialPageRoute(builder: (_) => const HomeScreen());
   }
 
   @override
